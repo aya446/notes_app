@@ -3,9 +3,9 @@ import 'package:notes_app/constants.dart';
 
 
 class CustomBotton extends StatelessWidget {
-  const CustomBotton({super.key, this.onTap});
+  const CustomBotton({super.key, this.onTap, required this.isLoading});
 
-  
+  final bool isLoading ;
   final void Function()? onTap;
 
   @override
@@ -19,8 +19,10 @@ class CustomBotton extends StatelessWidget {
           color: kPrimaryColor,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: const Center(
-          child: Text(
+        child:  Center(
+          child:  isLoading ? const CircularProgressIndicator(
+            color: Color.fromARGB(255, 62, 61, 61),
+          ): const Text(
             'Add',
             style: TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
