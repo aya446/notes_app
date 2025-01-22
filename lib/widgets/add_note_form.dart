@@ -1,7 +1,7 @@
-
-
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes_app/cubits/cubit/add_note_cubit.dart';
+import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/widgets/costum_text_field.dart';
 import 'package:notes_app/widgets/custom_botton.dart';
 
@@ -15,11 +15,11 @@ class AddNoteForm extends StatefulWidget {
 }
 
 class _AddNoteFormState extends State<AddNoteForm> {
-  AutovalidateMode autovalidateMode =AutovalidateMode.disabled;
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
   final GlobalKey<FormState> FormKey = GlobalKey();
   String? title, subtitle;
-  
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -44,7 +44,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
               hint: "Content",
               maxLinse: 5,
               onSaved: (value) {
-                subtitle = value ;
+                subtitle = value;
               },
             ),
             const SizedBox(
@@ -52,13 +52,17 @@ class _AddNoteFormState extends State<AddNoteForm> {
             ),
             CustomBotton(
               onTap: () {
-                if(FormKey.currentState!.validate()){
+                if (FormKey.currentState!.validate()) {
                   FormKey.currentState!.save();
-                }else {
+                  var noteModel = NoteModel(
+                      title: title!,
+                      subtitle: subtitle!,
+                      date: DateTime.now().toString(),
+                      color: Colors.brown.value);
+                  BlocProvider.of<AddNoteCubit>(context).addNote(noteModel);
+                } else {
                   autovalidateMode = AutovalidateMode.always;
-                  setState(() {
-                    
-                  });
+                  setState(() {});
                 }
               },
             ),
