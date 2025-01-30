@@ -5,7 +5,7 @@ import 'package:notes_app/constants.dart';
 import 'package:notes_app/cubits/cubit/notes_cubit.dart';
 import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/simple_bloc_observer.dart';
-import 'package:notes_app/views/unsplash_view.dart';
+import 'package:notes_app/views/splash_view.dart';
 
 void main() async {
 
