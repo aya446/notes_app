@@ -11,8 +11,9 @@ class NotesCubit extends Cubit<NotesState> {
   NotesCubit() : super(NotesInitial());
 
   List<NoteModel>? notes;
-  fetchAllNotes(){
-    notes =  Hive.box<NoteModel>(kNotesBox).values.toList();
+  fetchAllNotes()async {
+    var box = await Hive.openBox<NoteModel>(kNotesBox);
+    notes = box.values.toList().reversed.toList();
     emit(NotesSuccess());
   }
 }
