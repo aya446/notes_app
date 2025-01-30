@@ -11,9 +11,35 @@ class NotesCubit extends Cubit<NotesState> {
   NotesCubit() : super(NotesInitial());
 
   List<NoteModel>? notes;
-  fetchAllNotes()async {
+  List<NoteModel>? filteredNotes;
+  List<NoteModel>? favoriteNotes;
+  fetchAllNotes() async {
     var box = await Hive.openBox<NoteModel>(kNotesBox);
     notes = box.values.toList().reversed.toList();
+    filteredNotes = notes;
     emit(NotesSuccess());
+  }
+
+  searchNotes(String value) {
+    if (value.isEmpty) {
+      filteredNotes = notes;
+    } else {
+      filteredNotes = notes?.where((note) {
+        return note.title.toLowerCase().contains(value.toLowerCase()) ||
+            note.subtitle.toLowerCase().contains(value.toLowerCase());
+      }).toList();
+      emit(NotesSuccess());
+    }
+  }
+
+   toggleFavorite(NoteModel note) {
+    favoriteNotes ??= [];
+    if (favoriteNotes!.contains(note)) {
+      favoriteNotes!.remove(note); 
+    } else {
+      favoriteNotes!.add(note);
+    }
+
+    emit(NotesFavoritesUpdated(favoriteNotes: favoriteNotes!));
   }
 }

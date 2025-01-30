@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes_app/cubits/cubit/notes_cubit.dart';
 import 'package:notes_app/widgets/custom_search_icon.dart';
 
 class SearchAppBar extends StatefulWidget {
@@ -13,7 +15,6 @@ class SearchAppBar extends StatefulWidget {
   final IconData icon;
   final void Function()? onPressed;
 
-
   @override
   _SearchAppBarState createState() => _SearchAppBarState();
 }
@@ -21,49 +22,19 @@ class SearchAppBar extends StatefulWidget {
 class _SearchAppBarState extends State<SearchAppBar> {
   bool isSearching = false;
   TextEditingController searchController = TextEditingController();
-  
-  String? searchTitle;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        children: [
-          isSearching
-              ? customTexyField()
-              : Expanded(
-                  child: Row(
-                    children: [
-                      Text(
-                        widget.title,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 25),
-                      ),
-                      const Spacer()
-                    ],
-                  ),
-                ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: CustomIcon(
-              icon: widget.icon,
-              onPressed: () {
-                if (isSearching) {
-                  setState(() {
-                    isSearching = false; 
-                    searchController.clear(); 
-                  });
-                } else {
-                  setState(() {
-                    isSearching = true;
-                  });
-                }
-              },
-            ),
-          )
-        ],
-      ),
+    return Row(
+      children: [
+        customTexyField(),
+        Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: CustomIcon(
+            icon: widget.icon,
+          ),
+        )
+      ],
     );
   }
 
@@ -72,7 +43,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
       child: TextField(
         controller: searchController,
         autofocus: true,
-        style: const TextStyle(color: Colors.black),
+        style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
             contentPadding: const EdgeInsets.only(
               top: 15.0,
@@ -85,7 +56,10 @@ class _SearchAppBarState extends State<SearchAppBar> {
             enabledBorder: buildBorder(),
             focusedBorder: buildBorder()),
         onChanged: (value) {
-           searchTitle = value ;
+          BlocProvider.of<NotesCubit>(context).searchNotes(value);
+          if (value.isEmpty) {
+            BlocProvider.of<NotesCubit>(context).searchNotes('');
+          }
         },
       ),
     );
@@ -100,5 +74,3 @@ class _SearchAppBarState extends State<SearchAppBar> {
     );
   }
 }
-
-

@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:notes_app/cubits/cubit/notes_cubit.dart';
 import 'package:notes_app/models/note_model.dart';
 import 'package:notes_app/views/edit_note_view.dart';
+import 'package:notes_app/widgets/custom_list_tile.dart';
 
 class NoteItem extends StatelessWidget {
   const NoteItem({super.key, required this.note,});
@@ -18,7 +19,7 @@ class NoteItem extends StatelessWidget {
         BlocProvider.of<NotesCubit>(context).fetchAllNotes();
       },
       background: Container(
-        color: Colors.red, // اللون الذي يظهر عند السحب
+        color: Colors.red, 
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: const Icon(
@@ -48,31 +49,7 @@ class NoteItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  ListTile(
-                    title:  Text(
-                      note.title,
-                      style: const TextStyle(color: Colors.black, fontSize: 26),
-                    ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Text(
-                        note.subtitle,
-                        style: TextStyle(
-                            color: Colors.black.withOpacity(0.5), fontSize: 20),
-                      ),
-                    ),
-                    trailing: IconButton(
-                      onPressed: () {
-                        note.delete();
-                        BlocProvider.of<NotesCubit>(context).fetchAllNotes();
-                      },
-                      icon: const Icon(
-                        FontAwesomeIcons.trash,
-                        color: Colors.black,
-                        size: 24,
-                      ),
-                    ),
-                  ),
+                  CustomListTile(note: note),
                   Padding(
                     padding: const EdgeInsets.only(right: 24, top: 16),
                     child: Text(
